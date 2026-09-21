@@ -1,1 +1,105 @@
+<html>
 
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script> <!-- Using A-frame version 1.5.0 -->
+	<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+	<script> 
+
+        AFRAME.registerComponent('navigate-on-click', { 
+
+            schema: { 
+
+                url: { type: 'string', default: '' } 
+
+            }, 
+
+            init: function () { 
+
+                var data = this.data; 
+
+                var el = this.el; 
+
+                el.addEventListener('click', function () { 
+
+                    window.open(data.url, '_blank'); 
+
+                }); 
+
+            } 
+
+        }); 
+
+</script> 
+
+<!-- Card Effects --> 
+
+<script src="./vendor/aframe-hologram-shader.js"></script>
+
+<script src="./effects/holo-shimmer.js"></script> 
+
+<script src="./effects/matrix-stream.js"></script> 
+
+<script src="./effects/card-glow.js"></script> 
+
+<script src="./effects/halo-rings.js"></script> 
+
+<script src="./effects/shader-time.js"></script> 
+
+<script src="./components/avatar-effect-utils.js"></script> 
+
+<!-- glTF Effects --> 
+
+<script src="./components/effect-glitch.js"></script> 
+
+<script src="./components/effect-glow.js"></script> 
+
+<script src="./components/effect-matrix.js"></script> 
+
+
+
+</head>
+
+<body>
+	<!-- Start of a-scene, A-Frame uses right-hand coordinates -->
+	<!-- For more information: https://aframe.io/docs/1.5.0/guides/building-a-basic-scene.html#transforming-an-entity-in-3d -->
+	<a-scene mindar-image="imageTargetSrc: ./imageTargets/card.mind;" color-space="sRGB"
+		renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+		device-orientation-permission-ui="enabled: false">
+
+		<!-- Asset management system -->
+		<!-- For more information: https://aframe.io/docs/1.5.0/core/asset-management-system.html -->
+		<a-assets>
+			<img id="card" src="./images/virtualCard.png">
+			<a-asset-item id="avatarModel" src="./models/MyAvatar.glb"></a-asset-item> 
+		</a-assets>
+
+		<!-- Camera settings -->
+		<a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;"
+			raycaster="far: ${customFields.libVersion}; objects: .clickable"></a-camera>
+
+		<!-- Place your A-Frame Primitives below -->
+		<a-entity mindar-image-target="targetIndex: 0">
+			<a-plane src="#card" position="0 0 0" width="1" height="0.6"  rotation="0 0 0" material="shader: hologram; glitchBarDrift: 0.05; rgbSeparation: 0.5; glitchRate: 1;" ></a-plane>
+			<a-plane position="0 0 0.01" width="1" height="0.6" rotation="0 0 0" matrix-stream="color: #63ff9d; intensity: 0.85; columns: 15; speed: 120"> </a-plane> 
+            <a-text text="value: Zi Bing" align="left" position="-0.44 0.08 0" width="1.5"></a-text> 
+			<a-text text="value: Student" align="left" position="-0.44 0.02 0" width="1"></a-text> 
+			<a-text text="value: Contact Me; align: center; width: 1" geometry="primitive: plane; width: 0.25; height: 0.1;" material="color: gray; opacity: 1" position="0.35 -0.2 0.01" 
+			class="clickable" link="href: mailto: azibing@u.nus.edu"> </a-text> 
+
+			<a-text text="value: Click here for my portfolio; align: center; width: 1" geometry="primitive: plane; width: 0.6; height: 0.1;" material="color: gray; opacity: 0.5" position="0 -0.33 0.01" class="clickable" navigate-on-click="url: https://www.helloholo.sg"> </a-text> 
+
+			<a-entity position="0.35 0.2 0.1" rotation="0 0 0"> 
+				<a-gltf-model id="avatarModel" src="#avatarModel" position="0 0 0" rotation="0 0 0" scale="0.4 0.4 0.4" effect-glow="part: M_Tone01, Drone; color: #00e5ff; intensity: 1" ></a-gltf-model> 
+
+
+			</a-entity> 
+
+
+
+		</a-entity>
+	</a-scene>
+</body>
+
+</html>
